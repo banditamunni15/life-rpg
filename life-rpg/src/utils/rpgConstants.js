@@ -1,7 +1,3 @@
-// ============================================
-// RPG CONSTANTS — all tunable game data lives here
-// ============================================
-
 // The 5 core attributes every character has
 export const ATTRIBUTES = [
   "intelligence",

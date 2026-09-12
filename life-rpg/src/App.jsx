@@ -1,122 +1,116 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import heroImage from "./assets/hero.png";
+import Navbar from "./components/Navbar";
+import CharacterCard from "./components/CharacterCard";
+import QuestList from "./components/QuestList";
+import Attributes from "./components/Attributs";
+import StreakCard from "./components/StreakCard";
+import RewardCard from "./components/RewardCard";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [xp, setXp] = useState(720);
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <aside className="sidebar">
+        <div className="logo">
+          <div className="logo-mark">⚔</div>
+          <div>
+            <h2>LIFE RPG</h2>
+            <span>LEVEL UP YOUR LIFE</span>
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+        <nav>
+  <button
+    className="nav-item active"
+    onClick={() =>
+      document.getElementById("dashboard")?.scrollIntoView({
+        behavior: "smooth",
+      })
+    }
+  >
+    <span>🏠</span> Dashboard
+  </button>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+  <button
+    className="nav-item"
+    onClick={() =>
+      document.getElementById("quests")?.scrollIntoView({
+        behavior: "smooth",
+      })
+    }
+  >
+    <span>⚔️</span> Quests
+  </button>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+  <button
+    className="nav-item"
+    onClick={() =>
+      document.getElementById("stats")?.scrollIntoView({
+        behavior: "smooth",
+      })
+    }
+  >
+    <span>📊</span> Stats
+  </button>
+
+  <button
+    className="nav-item"
+    onClick={() =>
+      document.getElementById("rewards")?.scrollIntoView({
+        behavior: "smooth",
+      })
+    }
+  >
+    <span>🎁</span> Rewards
+  </button>
+</nav>
+        <div className="sidebar-bottom">
+          <div className="mini-streak">
+            <span>🔥</span>
+            <div>
+              <strong>7 DAY STREAK</strong>
+              <small>Keep going!</small>
+            </div>
+          </div>
+
+          <button className="settings">⚙️ Settings</button>
+        </div>
+      </aside>
+
+      <main className="main" id="dashboard">
+        <div className="game-hero">
+  <img src={heroImage} alt="Adventure world" />
+  <div className="game-hero-overlay">
+    <p>YOUR ADVENTURE AWAITS</p>
+    <h2>Level Up Your Skills.</h2>
+    <span>Complete quests. Earn XP. Become unstoppable.</span>
+  </div>
+</div>
+        <Navbar />
+
+        <CharacterCard xp={xp} />
+
+        <div className="dashboard-grid">
+          <div id="quests">
+  <QuestList
+    onQuestComplete={(amount) =>
+      setXp((current) => current + amount)
+    }
+  />
+</div>
+        <div id="stats">
+  <Attributes />
+</div>
+          <StreakCard />
+          <div id="rewards">
+  <RewardCard />
+</div>
+        </div>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;

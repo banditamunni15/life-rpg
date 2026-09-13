@@ -36,6 +36,12 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [retryToken, setRetryToken] = useState(0);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  function scrollToSection(id) {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMobileNavOpen(false);
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -159,7 +165,32 @@ function Dashboard() {
 
   return (
     <div className="app">
-      <aside className="sidebar">
+      {!mobileNavOpen && (
+        <button
+          className="mobile-menu-button"
+          onClick={() => setMobileNavOpen(true)}
+          aria-label="Open menu"
+        >
+          ☰
+        </button>
+      )}
+
+      {mobileNavOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setMobileNavOpen(false)}
+        />
+      )}
+
+      <aside className={`sidebar ${mobileNavOpen ? "sidebar-open" : ""}`}>
+        <button
+          className="sidebar-close"
+          onClick={() => setMobileNavOpen(false)}
+          aria-label="Close menu"
+        >
+          ✕
+        </button>
+
         <div className="logo">
           <div className="logo-mark">⚔</div>
           <div>
@@ -179,44 +210,25 @@ function Dashboard() {
         <nav>
           <button
             className="nav-item active"
-            onClick={() =>
-              document
-                .getElementById("dashboard")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => scrollToSection("dashboard")}
           >
             <span>🏠</span> Dashboard
           </button>
 
           <button
             className="nav-item"
-            onClick={() =>
-              document
-                .getElementById("quests")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => scrollToSection("quests")}
           >
             <span>⚔️</span> Quests
           </button>
 
-          <button
-            className="nav-item"
-            onClick={() =>
-              document
-                .getElementById("stats")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
+          <button className="nav-item" onClick={() => scrollToSection("stats")}>
             <span>📊</span> Stats
           </button>
 
           <button
             className="nav-item"
-            onClick={() =>
-              document
-                .getElementById("rewards")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => scrollToSection("rewards")}
           >
             <span>🎁</span> Rewards
           </button>
@@ -231,7 +243,13 @@ function Dashboard() {
             </div>
           </div>
 
-          <button className="settings" onClick={logout}>
+          <button
+            className="settings"
+            onClick={() => {
+              setMobileNavOpen(false);
+              logout();
+            }}
+          >
             🚪 Log Out
           </button>
         </div>

@@ -55,7 +55,53 @@ button {
   border-right: 1px solid #222a2e;
   display: flex;
   flex-direction: column;
-  z-index: 20;
+  z-index: 50;
+}
+
+/* Hamburger toggle - hidden on desktop, shown via the 700px media query */
+.mobile-menu-button {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 45;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #293237;
+  border-radius: 9px;
+  background: #10161a;
+  color: #e8e4d9;
+  font-size: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-menu-button:hover {
+  background: #171e23;
+}
+
+/* Close button inside the drawer - hidden on desktop */
+.sidebar-close {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #293237;
+  border-radius: 8px;
+  background: #10161a;
+  color: #8a9498;
+  font-size: 14px;
+}
+
+.sidebar-close:hover {
+  color: #e8e4d9;
+}
+
+.sidebar-backdrop {
+  display: none;
 }
 
 .logo {
@@ -1016,14 +1062,39 @@ button {
 }
 
 @media (max-width: 700px) {
+  .mobile-menu-button {
+    display: flex;
+  }
+
   .sidebar {
-    display: none;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    width: 250px;
+    box-shadow: none;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+    box-shadow: 20px 0 45px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar-close {
+    display: block;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 40;
   }
 
   .main {
     width: 100%;
     margin-left: 0;
     padding: 16px;
+    padding-top: 64px;
   }
 
   .game-hero {
@@ -2242,7 +2313,12 @@ button {
   }
 }
 
-.app {
+/* NOTE: intentionally NOT animating .app itself. A transform on .app (the
+   flex container that wraps the fixed sidebar) would make it a containing
+   block for position:fixed descendants, so the sidebar would scroll with
+   the page instead of staying pinned to the viewport. .main gets the
+   fade-in instead, which gives the same visual effect safely. */
+.main {
   animation: fadeInUp 0.5s ease both;
 }
 

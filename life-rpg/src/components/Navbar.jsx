@@ -7,7 +7,8 @@ function Navbar({ displayName, level, evolutionTitle }) {
         <p className="eyebrow">YOUR DAILY ADVENTURE</p>
 
         <h1>
-          Welcome back, <span>{displayName || "Player"}</span> 👋
+          Welcome back, <span>{displayName || "Player"}</span>{" "}
+          <span className="wave-emoji">👋</span>
         </h1>
 
         <p className="subtitle">
@@ -21,7 +22,7 @@ function Navbar({ displayName, level, evolutionTitle }) {
         <div>
           <strong>{(displayName || "Player").toUpperCase()}</strong>
           <small>
-            Level {level} {evolutionTitle}
+            🏅 LVL {level} · {evolutionTitle}
           </small>
         </div>
       </div>

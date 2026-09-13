@@ -168,6 +168,14 @@ function Dashboard() {
           </div>
         </div>
 
+        <div className="sidebar-level">
+          <div className="sidebar-level-badge">{level}</div>
+          <div className="sidebar-level-text">
+            <strong>LEVEL {level}</strong>
+            <span>{evolution.title.toUpperCase()}</span>
+          </div>
+        </div>
+
         <nav>
           <button
             className="nav-item active"
@@ -236,6 +244,17 @@ function Dashboard() {
             <p>YOUR ADVENTURE AWAITS</p>
             <h2>Level Up Your Skills.</h2>
             <span>Complete quests. Earn XP. Become unstoppable.</span>
+          </div>
+          <div className="game-hero-stats">
+            <div className="game-hero-chip">
+              🏅 <b>LVL {level}</b>
+            </div>
+            <div className="game-hero-chip">
+              🔥 <b>{userState.streak}</b> streak
+            </div>
+            <div className="game-hero-chip">
+              🪙 <b>{userState.coins.toLocaleString()}</b>
+            </div>
           </div>
         </div>
 

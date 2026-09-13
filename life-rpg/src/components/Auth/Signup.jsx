@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { friendlyAuthError } from "./Login.jsx";
 
-function Signup({ onSwitchToLogin }) {
+function Signup({ onSwitchToLogin, onBackToHome }) {
   const { signup } = useAuth();
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,6 +25,12 @@ function Signup({ onSwitchToLogin }) {
 
   return (
     <div className="auth-screen">
+      {onBackToHome && (
+        <button className="auth-back-link" onClick={onBackToHome} type="button">
+          ← Back to home
+        </button>
+      )}
+
       <div className="auth-card">
         <div className="logo">
           <div className="logo-mark">⚔</div>

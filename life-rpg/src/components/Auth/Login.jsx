@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-function Login({ onSwitchToSignup }) {
+function Login({ onSwitchToSignup, onBackToHome }) {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +23,12 @@ function Login({ onSwitchToSignup }) {
 
   return (
     <div className="auth-screen">
+      {onBackToHome && (
+        <button className="auth-back-link" onClick={onBackToHome} type="button">
+          ← Back to home
+        </button>
+      )}
+
       <div className="auth-card">
         <div className="logo">
           <div className="logo-mark">⚔</div>

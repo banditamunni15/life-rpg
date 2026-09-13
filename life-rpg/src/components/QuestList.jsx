@@ -46,7 +46,12 @@ function QuestList({ quests, onToggleQuest, onAddQuest, onDeleteQuest }) {
       completed: false,
     });
 
-    setNewQuest({ title: "", category: "study", difficulty: "medium", time: "30 min" });
+    setNewQuest({
+      title: "",
+      category: "study",
+      difficulty: "medium",
+      time: "30 min",
+    });
     setShowForm(false);
   };
 
@@ -60,9 +65,25 @@ function QuestList({ quests, onToggleQuest, onAddQuest, onDeleteQuest }) {
           <h2>Daily Quests</h2>
         </div>
 
-        <span className="quest-count">
-          {completedCount}/{quests.length} COMPLETE
-        </span>
+        <div className="quest-progress-group">
+          <div
+            className="quest-ring"
+            style={{
+              "--pct": `${quests.length ? (completedCount / quests.length) * 100 : 0}%`,
+            }}
+          >
+            <span>
+              {quests.length
+                ? Math.round((completedCount / quests.length) * 100)
+                : 0}
+              %
+            </span>
+          </div>
+
+          <span className="quest-count">
+            {completedCount}/{quests.length} COMPLETE
+          </span>
+        </div>
       </div>
 
       <div className="quest-board">
@@ -121,12 +142,16 @@ function QuestList({ quests, onToggleQuest, onAddQuest, onDeleteQuest }) {
             type="text"
             placeholder="Quest name"
             value={newQuest.title}
-            onChange={(e) => setNewQuest({ ...newQuest, title: e.target.value })}
+            onChange={(e) =>
+              setNewQuest({ ...newQuest, title: e.target.value })
+            }
           />
 
           <select
             value={newQuest.category}
-            onChange={(e) => setNewQuest({ ...newQuest, category: e.target.value })}
+            onChange={(e) =>
+              setNewQuest({ ...newQuest, category: e.target.value })
+            }
           >
             {Object.keys(CATEGORY_ATTRIBUTE_MAP).map((category) => (
               <option key={category} value={category}>
@@ -137,7 +162,9 @@ function QuestList({ quests, onToggleQuest, onAddQuest, onDeleteQuest }) {
 
           <select
             value={newQuest.difficulty}
-            onChange={(e) => setNewQuest({ ...newQuest, difficulty: e.target.value })}
+            onChange={(e) =>
+              setNewQuest({ ...newQuest, difficulty: e.target.value })
+            }
           >
             {Object.keys(XP_TABLE).map((difficulty) => (
               <option key={difficulty} value={difficulty}>
@@ -157,7 +184,10 @@ function QuestList({ quests, onToggleQuest, onAddQuest, onDeleteQuest }) {
             <button className="primary-button" onClick={handleAdd}>
               Add Quest
             </button>
-            <button className="cancel-button" onClick={() => setShowForm(false)}>
+            <button
+              className="cancel-button"
+              onClick={() => setShowForm(false)}
+            >
               Cancel
             </button>
           </div>

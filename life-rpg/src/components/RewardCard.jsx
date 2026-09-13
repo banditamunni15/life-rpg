@@ -1,5 +1,9 @@
-<<<<<<< HEAD
-function RewardCard() {
+const REWARD_COST = 500;
+
+function RewardCard({ coins = 0 }) {
+  const canAfford = coins >= REWARD_COST;
+  const remaining = Math.max(REWARD_COST - coins, 0);
+
   return (
     <section className="panel reward-panel">
       <p className="section-label">NEXT REWARD</p>
@@ -9,44 +13,14 @@ function RewardCard() {
 
         <div>
           <h2>30 min Gaming</h2>
-          <p>Cost: 500 Gold</p>
+          <p>Cost: {REWARD_COST} Gold</p>
         </div>
       </div>
 
-      <button className="reward-button">
-        View Rewards →
+      <button className="reward-button" disabled={!canAfford}>
+        {canAfford ? "Redeem →" : `${remaining} gold to go`}
       </button>
     </section>
-=======
-function RewardCard({ coins = 250 }) {
-  return (
-    <div className="rounded-2xl border border-yellow-400/20 bg-slate-900 p-5 shadow-lg">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm uppercase tracking-widest text-yellow-300">
-            Rewards
-          </p>
-
-          <h2 className="mt-2 text-3xl font-bold text-white">
-            {coins} Coins
-          </h2>
-
-          <p className="mt-1 text-sm text-slate-400">
-            Earn rewards by completing quests.
-          </p>
-        </div>
-
-        <div className="text-5xl">🪙</div>
-      </div>
-
-      <button
-        type="button"
-        className="mt-5 w-full rounded-lg bg-yellow-500 px-4 py-2 font-medium text-slate-950 transition hover:bg-yellow-400"
-      >
-        View Rewards
-      </button>
-    </div>
->>>>>>> origin/member4-ui
   );
 }
 

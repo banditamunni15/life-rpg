@@ -1,7 +1,13 @@
-function CharacterCard({ xp }) {
-  const level = 8;
-  const nextLevelXP = 1000;
-  const progress = Math.min((xp / nextLevelXP) * 100, 100);
+function CharacterCard({
+  xp,
+  levelProgress,
+  evolution,
+  characterBuild,
+  streak,
+  questsCompletedTotal,
+  coins,
+}) {
+  const { level, currentLevelXP, nextLevelXP, progress } = levelProgress;
   const needed = Math.max(nextLevelXP - xp, 0);
 
   return (
@@ -9,14 +15,18 @@ function CharacterCard({ xp }) {
       <div className="character-visual">
         <div className="character-glow"></div>
 
-        <div className="character-badge">
-          ⚔
-        </div>
+        <div className="character-badge">⚔</div>
 
         <div className="character-text">
-          <span className="character-status">ACTIVE ADVENTURE</span>
-          <h2>Adventurer</h2>
-          <p>Keep completing quests to unlock your next level.</p>
+          <span className="character-status">
+            {evolution.title.toUpperCase()} · STAGE {evolution.stage}
+          </span>
+          <h2>{characterBuild.title}</h2>
+          <p>
+            {characterBuild.value > 0
+              ? `Leading attribute: ${characterBuild.attribute} (${characterBuild.value})`
+              : "Complete quests to start shaping your build."}
+          </p>
         </div>
       </div>
 
@@ -34,14 +44,15 @@ function CharacterCard({ xp }) {
         </div>
 
         <div className="xp-bar">
-          <div
-            className="xp-fill"
-            style={{ width: `${progress}%` }}
-          ></div>
+          <div className="xp-fill" style={{ width: `${progress}%` }}></div>
         </div>
 
         <div className="xp-footer">
-          <span>{needed} XP needed for Level {level + 1}</span>
+          <span>
+            {currentLevelXP >= nextLevelXP
+              ? "Max level reached"
+              : `${needed} XP needed for Level ${level + 1}`}
+          </span>
           <span>{Math.round(progress)}%</span>
         </div>
       </div>
@@ -49,19 +60,19 @@ function CharacterCard({ xp }) {
       <div className="player-stats">
         <div className="player-stat">
           <div className="stat-icon">🔥</div>
-          <strong>7</strong>
+          <strong>{streak}</strong>
           <small>STREAK</small>
         </div>
 
         <div className="player-stat">
           <div className="stat-icon">⚔️</div>
-          <strong>24</strong>
+          <strong>{questsCompletedTotal}</strong>
           <small>QUESTS DONE</small>
         </div>
 
         <div className="player-stat">
           <div className="stat-icon">🪙</div>
-          <strong>1,240</strong>
+          <strong>{coins.toLocaleString()}</strong>
           <small>GOLD</small>
         </div>
       </div>

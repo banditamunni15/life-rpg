@@ -1,4 +1,4 @@
-function StreakCard({ streak = 7 }) {
+function StreakCard({ streak = 0 }) {
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
   const getGrowth = () => {

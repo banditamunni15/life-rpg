@@ -2121,3 +2121,142 @@ button {
     padding: 6px;
   }
 }
+
+/* ================================
+   AUTH (LOGIN / SIGNUP)
+================================ */
+
+.auth-screen {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 75% 5%, rgba(230, 151, 48, 0.08), transparent 25%),
+    radial-gradient(circle at 40% 80%, rgba(72, 112, 87, 0.08), transparent 30%),
+    #080b0f;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 32px 28px;
+  border: 1px solid #293237;
+  border-radius: 16px;
+  background: #10161a;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+
+.auth-card .logo {
+  margin-bottom: 24px;
+}
+
+.auth-card h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  color: #8a9498;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8a9498;
+}
+
+.auth-form input {
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid #303b40;
+  background: #171d21;
+  color: #f4f1e8;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #d88b32;
+}
+
+.auth-error {
+  background: rgba(214, 84, 66, 0.12);
+  border: 1px solid rgba(214, 84, 66, 0.4);
+  color: #f0a89f;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.auth-switch {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: #8a9498;
+}
+
+.auth-switch button {
+  background: none;
+  border: none;
+  color: #d88b32;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 0;
+}
+
+.auth-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a9498;
+  font-size: 14px;
+  background: #080b0f;
+}
+
+/* ================================
+   QUEST DELETE / DISABLED REWARD (additions)
+================================ */
+
+.quest-delete {
+  background: none;
+  border: none;
+  color: #5a6468;
+  font-size: 13px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.quest-delete:hover {
+  color: #f0a89f;
+  background: rgba(214, 84, 66, 0.12);
+}
+
+.reward-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.reward-button:disabled:hover {
+  background: #17130e;
+}

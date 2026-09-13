@@ -1,81 +1,56 @@
 import { useState } from "react";
+import { CATEGORY_ATTRIBUTE_MAP, XP_TABLE } from "../utils/rpgConstants.js";
 
-function QuestList({ onQuestComplete }) {
-  const [quests, setQuests] = useState([
-    {
-      title: "Study Computer Networks",
-      xp: 40,
-      time: "60 min",
-      icon: "📚",
-      completed: false,
-    },
-    {
-      title: "Solve 3 DSA Problems",
-      xp: 60,
-      time: "45 min",
-      icon: "⚔️",
-      completed: false,
-    },
-    {
-      title: "Build Hackathon Project",
-      xp: 80,
-      time: "90 min",
-      icon: "🛠️",
-      completed: false,
-    },
-  ]);
+const CATEGORY_LABELS = {
+  study: "📚 Study",
+  coding: "💻 Coding",
+  exercise: "💪 Exercise",
+  reading: "📖 Reading",
+  personal: "🧘 Personal",
+};
 
+const DIFFICULTY_LABELS = {
+  easy: `Easy (+${XP_TABLE.easy} XP)`,
+  medium: `Medium (+${XP_TABLE.medium} XP)`,
+  hard: `Hard (+${XP_TABLE.hard} XP)`,
+  epic: `Epic (+${XP_TABLE.epic} XP)`,
+};
+
+const CATEGORY_ICONS = {
+  study: "📚",
+  coding: "💻",
+  exercise: "💪",
+  reading: "📖",
+  personal: "🧘",
+};
+
+function QuestList({ quests, onToggleQuest, onAddQuest, onDeleteQuest }) {
   const [showForm, setShowForm] = useState(false);
   const [newQuest, setNewQuest] = useState({
     title: "",
-    xp: 40,
+    category: "study",
+    difficulty: "medium",
     time: "30 min",
   });
 
-  const toggleQuest = (index) => {
-    const quest = quests[index];
-
-    setQuests((oldQuests) =>
-      oldQuests.map((quest, i) =>
-        i === index
-          ? { ...quest, completed: !quest.completed }
-          : quest
-      )
-    );
-
-    if (!quest.completed) {
-      onQuestComplete(quest.xp);
-    } else {
-      onQuestComplete(-quest.xp);
-    }
-  };
-
-  const addQuest = () => {
+  const handleAdd = () => {
     if (!newQuest.title.trim()) return;
 
-    setQuests([
-      ...quests,
-      {
-        title: newQuest.title,
-        xp: Number(newQuest.xp),
-        time: newQuest.time,
-        icon: "⭐",
-        completed: false,
-      },
-    ]);
-
-    setNewQuest({
-      title: "",
-      xp: 40,
-      time: "30 min",
+    onAddQuest({
+      id: `quest-${Date.now()}`,
+      title: newQuest.title,
+      category: newQuest.category,
+      difficulty: newQuest.difficulty,
+      time: newQuest.time,
+      icon: CATEGORY_ICONS[newQuest.category] ?? "⭐",
+      completed: false,
     });
 
+    setNewQuest({ title: "", category: "study", difficulty: "medium", time: "30 min" });
     setShowForm(false);
   };
 
-  const completedCount = quests.filter(
-    (quest) => quest.completed
-  ).length;
+  const completedCount = quests.filter((quest) => quest.completed).length;
 
   return (
     <section className="panel quests-panel">
@@ -94,43 +69,48 @@ function QuestList({ onQuestComplete }) {
         {quests.map((quest, index) => (
           <div
             className={`quest ${quest.completed ? "completed" : ""}`}
-            key={`${quest.title}-${index}`}
+            key={quest.id ?? `${quest.title}-${index}`}
           >
             <button
               className="quest-check"
-              onClick={() => toggleQuest(index)}
+              onClick={() => onToggleQuest(quest.id)}
               aria-label={`Complete ${quest.title}`}
             >
               {quest.completed ? "✓" : ""}
             </button>
 
-            <div className="quest-icon">
-              {quest.icon}
-            </div>
+            <div className="quest-icon">{quest.icon}</div>
 
             <div className="quest-content">
               <div className="quest-title-row">
                 <h3>{quest.title}</h3>
-
-                <span className="quest-number">
-                  0{index + 1}
-                </span>
+                <span className="quest-number">0{index + 1}</span>
               </div>
 
               <div className="quest-meta">
                 <span>⏱ {quest.time}</span>
                 <span className="quest-dot">•</span>
-                <span>
-                  {quest.completed ? "Completed" : "In progress"}
-                </span>
+                <span>{CATEGORY_LABELS[quest.category] ?? quest.category}</span>
+                <span className="quest-dot">•</span>
+                <span>{quest.completed ? "Completed" : "In progress"}</span>
               </div>
             </div>
 
             <div className="quest-reward">
               <span>REWARD</span>
-              <strong>+{quest.xp}</strong>
+              <strong>+{XP_TABLE[quest.difficulty] ?? 0}</strong>
               <small>XP</small>
             </div>
+
+            {onDeleteQuest && (
+              <button
+                className="quest-delete"
+                onClick={() => onDeleteQuest(quest.id)}
+                aria-label={`Delete ${quest.title}`}
+              >
+                ✕
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -141,50 +121,43 @@ function QuestList({ onQuestComplete }) {
             type="text"
             placeholder="Quest name"
             value={newQuest.title}
-            onChange={(e) =>
-              setNewQuest({
-                ...newQuest,
-                title: e.target.value,
-              })
-            }
+            onChange={(e) => setNewQuest({ ...newQuest, title: e.target.value })}
           />
 
-          <input
-            type="number"
-            placeholder="XP"
-            value={newQuest.xp}
-            onChange={(e) =>
-              setNewQuest({
-                ...newQuest,
-                xp: e.target.value,
-              })
-            }
-          />
+          <select
+            value={newQuest.category}
+            onChange={(e) => setNewQuest({ ...newQuest, category: e.target.value })}
+          >
+            {Object.keys(CATEGORY_ATTRIBUTE_MAP).map((category) => (
+              <option key={category} value={category}>
+                {CATEGORY_LABELS[category] ?? category}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={newQuest.difficulty}
+            onChange={(e) => setNewQuest({ ...newQuest, difficulty: e.target.value })}
+          >
+            {Object.keys(XP_TABLE).map((difficulty) => (
+              <option key={difficulty} value={difficulty}>
+                {DIFFICULTY_LABELS[difficulty] ?? difficulty}
+              </option>
+            ))}
+          </select>
 
           <input
             type="text"
             placeholder="Time e.g. 30 min"
             value={newQuest.time}
-            onChange={(e) =>
-              setNewQuest({
-                ...newQuest,
-                time: e.target.value,
-              })
-            }
+            onChange={(e) => setNewQuest({ ...newQuest, time: e.target.value })}
           />
 
           <div className="form-buttons">
-            <button
-              className="primary-button"
-              onClick={addQuest}
-            >
+            <button className="primary-button" onClick={handleAdd}>
               Add Quest
             </button>
-
-            <button
-              className="cancel-button"
-              onClick={() => setShowForm(false)}
-            >
+            <button className="cancel-button" onClick={() => setShowForm(false)}>
               Cancel
             </button>
           </div>
@@ -192,10 +165,7 @@ function QuestList({ onQuestComplete }) {
       )}
 
       {!showForm && (
-        <button
-          className="primary-button"
-          onClick={() => setShowForm(true)}
-        >
+        <button className="primary-button" onClick={() => setShowForm(true)}>
           + Create New Quest
         </button>
       )}

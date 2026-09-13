@@ -3,7 +3,7 @@
 // Copy .env.example to .env.local and fill in your Firebase project's values.
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -19,13 +19,25 @@ const missingKeys = Object.entries(firebaseConfig)
   .map(([key]) => key);
 
 if (missingKeys.length > 0) {
-  throw new Error(
+  // eslint-disable-next-line no-console
+  console.warn(
     `[firebase] Missing config values: ${missingKeys.join(
       ", ",
-    )}. Copy .env.example to .env.local and use the current Web app config from Firebase Console.`,
+    )}. Did you create a .env.local from .env.example?`,
   );
 }
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+// Firestore's default streaming (WebChannel/gRPC) connection gets silently
+// blocked on some corporate networks, VPNs, sandboxed browsers, and by some
+// extensions - which surfaces as a misleading "client is offline" error even
+// though the network is fine. Auto-detecting long polling falls back to
+// plain HTTP requests instead of a persistent stream, which works almost
+// everywhere. It's slightly less efficient but far more reliable, so it's a
+// good default for a hackathon build.
+export const db = initializeFirestore(app, {
+  experimentalAutoDetectLongPolling: true,
+  useFetchStreams: false,
+});

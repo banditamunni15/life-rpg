@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -29,8 +29,16 @@ button {
   min-height: 100vh;
   display: flex;
   background:
-    radial-gradient(circle at 75% 5%, rgba(230, 151, 48, 0.08), transparent 25%),
-    radial-gradient(circle at 40% 80%, rgba(72, 112, 87, 0.08), transparent 30%),
+    radial-gradient(
+      circle at 75% 5%,
+      rgba(230, 151, 48, 0.08),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 40% 80%,
+      rgba(72, 112, 87, 0.08),
+      transparent 30%
+    ),
     #080b0f;
 }
 
@@ -203,11 +211,7 @@ button {
       rgba(5, 8, 11, 0.35) 60%,
       rgba(5, 8, 11, 0.15) 100%
     ),
-    linear-gradient(
-      0deg,
-      rgba(5, 8, 11, 0.75),
-      transparent 55%
-    );
+    linear-gradient(0deg, rgba(5, 8, 11, 0.75), transparent 55%);
 }
 
 .game-hero-overlay {
@@ -343,11 +347,7 @@ button {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    0deg,
-    rgba(7, 10, 12, 0.9),
-    transparent 65%
-  );
+  background: linear-gradient(0deg, rgba(7, 10, 12, 0.9), transparent 65%);
 }
 
 .character-badge {
@@ -2134,8 +2134,16 @@ button {
   justify-content: center;
   padding: 24px;
   background:
-    radial-gradient(circle at 75% 5%, rgba(230, 151, 48, 0.08), transparent 25%),
-    radial-gradient(circle at 40% 80%, rgba(72, 112, 87, 0.08), transparent 30%),
+    radial-gradient(
+      circle at 75% 5%,
+      rgba(230, 151, 48, 0.08),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 40% 80%,
+      rgba(72, 112, 87, 0.08),
+      transparent 30%
+    ),
     #080b0f;
 }
 
@@ -2259,4 +2267,32 @@ button {
 
 .reward-button:disabled:hover {
   background: #17130e;
+}
+
+/* ================================
+   LOAD ERROR
+================================ */
+
+.load-error-box {
+  max-width: 420px;
+  text-align: center;
+  padding: 24px;
+}
+
+.load-error-box p {
+  margin-bottom: 18px;
+  line-height: 1.5;
+  color: #d8dde0;
+}
+
+.load-error-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.load-error-actions .primary-button,
+.load-error-actions .cancel-button {
+  width: auto;
+  flex: 1;
+  margin-top: 0;
 }

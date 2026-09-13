@@ -16,28 +16,43 @@ import {
   calculateLevel,
 } from "../utils/rpgEngine.js";
 
+function describeLoadError(err) {
+  const code = err?.code ?? "";
+  if (code === "unavailable" || /offline/i.test(err?.message ?? "")) {
+    return "Can't reach Firestore right now. This usually means the Firestore database hasn't been created yet in the Firebase console, or something on this network (firewall/VPN/extension) is blocking the connection.";
+  }
+  if (code === "permission-denied") {
+    return "Firestore rejected the request (permission-denied). Check that firestore.rules has been deployed and matches your signed-in user.";
+  }
+  if (code === "not-found") {
+    return "Firestore database not found for this project. Create a Cloud Firestore database in the Firebase console.";
+  }
+  return "Couldn't load your saved progress. Check your Firebase setup.";
+}
+
 function Dashboard() {
   const { currentUser, logout } = useAuth();
   const [userState, setUserState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [retryToken, setRetryToken] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
 
     async function loadState() {
+      setLoading(true);
+      setError("");
       try {
         const state = await getOrCreateUserState(
           currentUser.uid,
-          currentUser.displayName || "Player"
+          currentUser.displayName || "Player",
         );
         if (!cancelled) setUserState(state);
       } catch (err) {
         console.error(err);
         if (!cancelled) {
-          setError(
-            "Couldn't load your saved progress. Check your Firebase setup."
-          );
+          setError(describeLoadError(err));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -48,7 +63,7 @@ function Dashboard() {
     return () => {
       cancelled = true;
     };
-  }, [currentUser]);
+  }, [currentUser, retryToken]);
 
   async function persist(nextState) {
     setUserState(nextState);
@@ -67,7 +82,7 @@ function Dashboard() {
     // claw back XP/attributes, to keep the reward logic simple for the MVP.
     if (quest.completed) {
       const updatedQuests = userState.quests.map((q) =>
-        q.id === questId ? { ...q, completed: false } : q
+        q.id === questId ? { ...q, completed: false } : q,
       );
       persist({ ...userState, quests: updatedQuests });
       return;
@@ -85,7 +100,7 @@ function Dashboard() {
     });
 
     const updatedQuests = userState.quests.map((q) =>
-      q.id === questId ? { ...q, completed: true } : q
+      q.id === questId ? { ...q, completed: true } : q,
     );
 
     persist({
@@ -119,11 +134,19 @@ function Dashboard() {
   if (error) {
     return (
       <div className="auth-loading">
-        <div>
+        <div className="load-error-box">
           <p>{error}</p>
-          <button className="primary-button" onClick={logout}>
-            Log out
-          </button>
+          <div className="load-error-actions">
+            <button
+              className="primary-button"
+              onClick={() => setRetryToken((t) => t + 1)}
+            >
+              Retry
+            </button>
+            <button className="cancel-button" onClick={logout}>
+              Log out
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -149,7 +172,9 @@ function Dashboard() {
           <button
             className="nav-item active"
             onClick={() =>
-              document.getElementById("dashboard")?.scrollIntoView({ behavior: "smooth" })
+              document
+                .getElementById("dashboard")
+                ?.scrollIntoView({ behavior: "smooth" })
             }
           >
             <span>🏠</span> Dashboard
@@ -158,7 +183,9 @@ function Dashboard() {
           <button
             className="nav-item"
             onClick={() =>
-              document.getElementById("quests")?.scrollIntoView({ behavior: "smooth" })
+              document
+                .getElementById("quests")
+                ?.scrollIntoView({ behavior: "smooth" })
             }
           >
             <span>⚔️</span> Quests
@@ -167,7 +194,9 @@ function Dashboard() {
           <button
             className="nav-item"
             onClick={() =>
-              document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" })
+              document
+                .getElementById("stats")
+                ?.scrollIntoView({ behavior: "smooth" })
             }
           >
             <span>📊</span> Stats
@@ -176,7 +205,9 @@ function Dashboard() {
           <button
             className="nav-item"
             onClick={() =>
-              document.getElementById("rewards")?.scrollIntoView({ behavior: "smooth" })
+              document
+                .getElementById("rewards")
+                ?.scrollIntoView({ behavior: "smooth" })
             }
           >
             <span>🎁</span> Rewards
